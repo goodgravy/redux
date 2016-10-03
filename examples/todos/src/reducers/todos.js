@@ -4,6 +4,7 @@ const todo = (state, action) => {
       return {
         id: action.id,
         text: action.text,
+        editing: false,
         completed: false
       }
     case 'TOGGLE_TODO':
@@ -14,6 +15,25 @@ const todo = (state, action) => {
       return {
         ...state,
         completed: !state.completed
+      }
+    case 'EDIT_TODO':
+      if (state.id !== action.id) {
+        return state
+      }
+
+      return {
+        ...state,
+        editing: true
+      }
+    case 'SAVE_TODO':
+      if (state.id !== action.id) {
+        return state
+      }
+
+      return {
+        ...state,
+        editing: false,
+        text: action.text
       }
     default:
       return state
@@ -28,6 +48,8 @@ const todos = (state = [], action) => {
         todo(undefined, action)
       ]
     case 'TOGGLE_TODO':
+    case 'EDIT_TODO':
+    case 'SAVE_TODO':
       return state.map(t =>
         todo(t, action)
       )

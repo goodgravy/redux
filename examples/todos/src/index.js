@@ -1,15 +1,24 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
 import App from './components/App'
+import OneTodo from './components/OneTodo'
+import React from 'react'
 import reducer from './reducers'
+import { Provider } from 'react-redux'
+import { Router, Route, browserHistory } from 'react-router';
+import { createStore } from 'redux'
+import { render } from 'react-dom'
 
 const store = createStore(reducer)
 
-render(
+const Root = ({ store }) => (
   <Provider store={store}>
-    <App />
-  </Provider>,
+    <Router history={browserHistory}>
+      <Route path="/todo/(:id)" component={OneTodo} />
+      <Route path="/(:filter)" component={App} />
+    </Router>
+  </Provider>
+);
+
+render(
+  <Root store={store} />,
   document.getElementById('root')
 )
